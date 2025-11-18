@@ -25,7 +25,7 @@ import java.util.List;
 )
 @NamedQuery(name = ChatConstants.FIND_CHAT_BY_SENDER_ID_AND_RECEIVER_ID,
         query = "SELECT DISTINCT c from Chat c where (c.sender.id = :senderId AND c.recipient.id = :recipientId)" +
-                " OR (c.sender.id = :recipientId AND c.recipient.id = :senderID) ORDER BY createdDate DESC "
+                " OR (c.sender.id = :recipientId AND c.recipient.id = :senderId) ORDER BY createdDate DESC "
 )
 public class Chat extends BaseAuditingEntity {
     @Id
