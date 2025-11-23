@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class FileService {
 
-    @Value("${spring.application.file.uploads.media-output-path}")
+    @Value("${application.file.uploads.media-output-path}")
     private String fileUploadPath;
     public String saveFile(
             @NonNull MultipartFile sourceFile,

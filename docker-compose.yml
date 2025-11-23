@@ -7,6 +7,8 @@ services:
       POSTGRES_PASSWORD: password
       PGDATA: /var/lib/postgresql/data
       POSTGRES_DB: whatsapp_clone
+      TZ: Asia/Ho_Chi_Minh
+      PGTZ: Asia/Ho_Chi_Minh
     volumes:
       - postgres:/data/postgres
     ports:

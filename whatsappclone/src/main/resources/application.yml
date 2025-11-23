@@ -1,10 +1,12 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/whatsapp_clone
+    url: jdbc:postgresql://localhost:5432/whatsapp_clone?options=-c%20timezone=Asia/Ho_Chi_Minh
     username: username
     password: password
   jpa:
     hibernate:
+      jdbc:
+        time_zone: Asia/Ho_Chi_Minh
       ddl-auto: update
     show-sql: false
     properties:
@@ -12,6 +14,10 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  jackson:
+    time-zone: Asia/Ho_Chi_Minh
+
   flyway:
     enabled: false
 
@@ -25,7 +31,10 @@ spring:
     multipart:
       max-file-size: 50MB
 
-  application:
-    file:
-      uploads:
-        media-output-path: ./uploads
+springdoc:
+  default-produces-media-type: application/json
+
+application:
+  file:
+    uploads:
+      media-output-path: ./uploads
