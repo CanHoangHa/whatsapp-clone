@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #ccc;
+}
+
+.gray-bg {
+  background-color: #f0f2f5;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.main-container {
+  position: relative;
+  width: 80%;
+  max-width: 100%;
+  height: calc(100vh - 40px);
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), 0 2px 5px rgba(0, 0, 0, 0.6);
+}
