@@ -14,8 +14,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { ChatResponse } from '../models/chat-response';
 import { createChat } from '../fn/chat/create-chat';
 import { CreateChat$Params } from '../fn/chat/create-chat';
-import { getChatsByReceiverId } from '../fn/chat/get-chats-by-receiver-id';
-import { GetChatsByReceiverId$Params } from '../fn/chat/get-chats-by-receiver-id';
+import { getChatsByReceiver } from '../fn/chat/get-chats-by-receiver';
+import { GetChatsByReceiver$Params } from '../fn/chat/get-chats-by-receiver';
 import { StringResponse } from '../models/string-response';
 
 @Injectable({ providedIn: 'root' })
@@ -24,27 +24,27 @@ export class ChatService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getChatsByReceiverId()` */
-  static readonly GetChatsByReceiverIdPath = '/api/v1/chats';
+  /** Path part for operation `getChatsByReceiver()` */
+  static readonly GetChatsByReceiverPath = '/api/v1/chats';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getChatsByReceiverId()` instead.
+   * To access only the response body, use `getChatsByReceiver()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getChatsByReceiverId$Response(params?: GetChatsByReceiverId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ChatResponse>>> {
-    return getChatsByReceiverId(this.http, this.rootUrl, params, context);
+  getChatsByReceiver$Response(params?: GetChatsByReceiver$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ChatResponse>>> {
+    return getChatsByReceiver(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getChatsByReceiverId$Response()` instead.
+   * To access the full response (for headers, for example), `getChatsByReceiver$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getChatsByReceiverId(params?: GetChatsByReceiverId$Params, context?: HttpContext): Observable<Array<ChatResponse>> {
-    return this.getChatsByReceiverId$Response(params, context).pipe(
+  getChatsByReceiver(params?: GetChatsByReceiver$Params, context?: HttpContext): Observable<Array<ChatResponse>> {
+    return this.getChatsByReceiver$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<ChatResponse>>): Array<ChatResponse> => r.body)
     );
   }

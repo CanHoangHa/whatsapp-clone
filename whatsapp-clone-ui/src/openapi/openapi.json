@@ -101,7 +101,7 @@
         "tags": [
           "Chat"
         ],
-        "operationId": "getChatsByReceiverId",
+        "operationId": "getChatsByReceiver",
         "responses": {
           "200": {
             "description": "OK",

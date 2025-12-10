@@ -10,11 +10,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ChatResponse } from '../../models/chat-response';
 
-export interface GetChatsByReceiverId$Params {
+export interface GetChatsByReceiver$Params {
 }
 
-export function getChatsByReceiverId(http: HttpClient, rootUrl: string, params?: GetChatsByReceiverId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ChatResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getChatsByReceiverId.PATH, 'get');
+export function getChatsByReceiver(http: HttpClient, rootUrl: string, params?: GetChatsByReceiver$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ChatResponse>>> {
+  const rb = new RequestBuilder(rootUrl, getChatsByReceiver.PATH, 'get');
   if (params) {
   }
 
@@ -28,4 +28,4 @@ export function getChatsByReceiverId(http: HttpClient, rootUrl: string, params?:
   );
 }
 
-getChatsByReceiverId.PATH = '/api/v1/chats';
+getChatsByReceiver.PATH = '/api/v1/chats';

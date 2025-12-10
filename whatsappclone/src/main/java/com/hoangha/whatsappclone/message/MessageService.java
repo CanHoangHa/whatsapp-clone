@@ -46,7 +46,7 @@ public class MessageService {
                 .content(messageRequest.getContent())
                 .messageType(messageRequest.getMessageType())
                 .type(NotificationType.MESSAGE)
-                .chatName(chat.getChatName(message.getSenderId()))
+                .chatName(chat.getTargetChatName(message.getSenderId()))
                 .build();
 
         notificationService.sendNotification(message.getReceiverId(), notification);
@@ -64,19 +64,28 @@ public class MessageService {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new EntityNotFoundException("Chat not found"));
 
-        final String recipientId = getRecipientId(chat, authentication);
-        final String senderId = getSenderId(chat, authentication);
+        final String currentUserId = authentication.getName();
+        final String otherUserId = (chat.getSender().getId().equals(currentUserId))
+                ? chat.getRecipient().getId()
+                : chat.getSender().getId();
 
-        messageRepository.setMessagesToSeenByChatId(chatId, MessageState.SEEN);
+        int updatedCount = messageRepository.setMessagesToSeenByChatId(
+                chatId,
+                MessageState.SEEN,
+                currentUserId
+        );
 
-        Notification notification = Notification.builder()
-                .chatId(chat.getId())
-                .senderId(senderId)
-                .receiverId(recipientId)
-                .type(NotificationType.SEEN)
-                .build();
+        if (updatedCount > 0) {
+            Notification notification = Notification.builder()
+                    .chatId(chat.getId())
+                    .senderId(currentUserId)
+                    .receiverId(otherUserId)
+                    .messageType(MessageType.TEXT)
+                    .type(NotificationType.SEEN)
+                    .build();
 
-        notificationService.sendNotification(recipientId, notification);
+            notificationService.sendNotification(otherUserId, notification);
+        }
     }
 
 

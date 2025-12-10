@@ -29,7 +29,7 @@ public class ChatController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ChatResponse>> getChatsByReceiverId(Authentication authentication) {
-        return ResponseEntity.ok(chatService.getChatsByReceiverId(authentication));
+    public ResponseEntity<List<ChatResponse>> getChatsByReceiver(Authentication authentication) {
+        return ResponseEntity.ok(chatService.getChatsByReceiver(authentication));
     }
 }
