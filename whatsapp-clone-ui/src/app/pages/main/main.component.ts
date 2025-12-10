@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild, viewChild} from '@angular/core';
 import {ChatListComponent} from '../../components/chat-list/chat-list.component';
 import {ChatResponse} from '../../services/models/chat-response';
 import {ChatService} from '../../services/services/chat.service';
@@ -25,13 +25,14 @@ import { Notification } from './notification';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent implements OnInit, OnDestroy{
+export class MainComponent implements OnInit, OnDestroy, AfterViewChecked{
   chats: Array<ChatResponse> = [];
   selectedChat: ChatResponse = {};
   chatMessages: MessageResponse[] = [];
   showEmojis: boolean = false;
   messageContent: string = '';
   socketClient: Stomp.Client | null = null;
+  @ViewChild('scrollableDiv') scrollableDiv!: ElementRef<HTMLDivElement>;
   private notificationSubscription: Stomp.Subscription | null = null;
 
   constructor(
@@ -56,6 +57,17 @@ export class MainComponent implements OnInit, OnDestroy{
         this.socketClient = null;
         console.log('Disconnected WebSocket');
       });
+    }
+  }
+  
+  ngAfterViewChecked(): void {
+      this.scrollBottom();
+  }
+
+  private scrollBottom() {
+    if(this.scrollableDiv) {
+      const div = this.scrollableDiv.nativeElement;
+      div.scrollTop = div.scrollHeight;
     }
   }
 
