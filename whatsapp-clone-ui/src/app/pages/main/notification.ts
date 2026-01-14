@@ -4,7 +4,7 @@ export interface Notification {
     senderId?: string;
     receiverId?: string;
     messageType?: 'TEXT' | 'IMAGE' | 'VIDEO' | 'AUDIO';
-    type?: 'SEEN' | 'MESSAGE' | 'IMAGE' | 'VIDEO' | 'AUDIO';
+    type?: 'SEEN' | 'MESSAGE' | 'IMAGE' | 'VIDEO' | 'AUDIO' | 'ONLINE' | 'OFFLINE';
     chatName? : string;
     media?: Array<string>;
 }

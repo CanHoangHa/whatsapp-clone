@@ -20,4 +20,15 @@ public class NotificationService {
                 notification
         );
     }
+
+    public void broadcastUserStatus(Notification notification){
+        log.info("Sending WS user status with payload {}", notification);
+
+        // Bắn thẳng object nhận từ Kafka xuống Client
+        messagingTemplate.convertAndSend(
+                "/topic/user-status",
+                notification
+        );
+    }
+
 }

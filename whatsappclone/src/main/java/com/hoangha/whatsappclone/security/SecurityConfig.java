@@ -43,7 +43,7 @@ public class SecurityConfig {
                         )
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(token->
-                                token.jwtAuthenticationConverter(new KeyCloakJwtAuthenticationConverter())
+                                token.jwtAuthenticationConverter(keycloakJwtAuthenticationConverter())
                         )
                 );
         return httpSecurity.build();
@@ -76,4 +76,11 @@ public class SecurityConfig {
 
         return new CorsFilter(source);
     }
+
+
+    @Bean
+    public KeyCloakJwtAuthenticationConverter keycloakJwtAuthenticationConverter() {
+        return new KeyCloakJwtAuthenticationConverter();
+    }
+
 }

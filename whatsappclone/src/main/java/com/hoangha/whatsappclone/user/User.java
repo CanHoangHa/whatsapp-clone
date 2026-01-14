@@ -26,6 +26,9 @@ import java.util.List;
 @NamedQuery(name = UserConstants.FIND_USER_BY_PUBLIC_ID,
         query = "SELECT u from User  u WHERE u.id = :publicId"
 )
+@NamedQuery(name = UserConstants.UPDATE_LAST_SEEN,
+        query = "UPDATE User u SET u.lastSeen = :time WHERE u.id = :userId"
+)
 public class User extends BaseAuditingEntity {
     private static final int LAST_ACTIVE_INTERVAL = 5;
     @Id

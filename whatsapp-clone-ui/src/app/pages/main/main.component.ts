@@ -33,7 +33,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked{
   messageContent: string = '';
   socketClient: Stomp.Client | null = null;
   @ViewChild('scrollableDiv') scrollableDiv!: ElementRef<HTMLDivElement>;
-  private notificationSubscription: Stomp.Subscription | null = null;
+  private stompSubscriptions: Stomp.Subscription[] = [];
 
   constructor(
     private chatService: ChatService,
@@ -49,9 +49,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked{
   }
 
   ngOnDestroy(): void {
-    if (this.notificationSubscription) {
-      this.notificationSubscription.unsubscribe();
-    }
+    this.stompSubscriptions.forEach(sub => sub.unsubscribe());
+    this.stompSubscriptions = [];
     if (this.socketClient !== null) {
       this.socketClient.disconnect(() => {
         this.socketClient = null;
@@ -225,13 +224,23 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked{
       const subUrl = `/user/${this.keycloakService.keycloak.tokenParsed?.sub}/chat`;
       this.socketClient.connect({'Authorization' : 'Bearer ' + this.keycloakService.keycloak.token},
           () => {
-            this.notificationSubscription = this.socketClient!.subscribe(subUrl,
+            const sub1 = this.socketClient!.subscribe(subUrl,
                 (message: any) => {
                   const notification : Notification = JSON.parse(message.body);
                   this.handleNotification(notification);
                 },
                 () => console.error('Error while connecting to webSocket')
             )
+            this.stompSubscriptions.push(sub1);
+
+            const sub2 = this.socketClient!.subscribe(
+              '/topic/user-status',
+              (message: any) => {
+                const notification : Notification = JSON.parse(message.body);
+                this.handleUserStatus(notification);
+              }
+            )
+            this.stompSubscriptions.push(sub1);
           }
       )
     }
@@ -290,4 +299,27 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked{
 
     }
   }
+
+  private handleUserStatus(notification: Notification) {
+    if (!notification || !notification.senderId) return;
+  
+    const chatToUpdate = this.chats.find(
+      c => c.senderId === notification.senderId
+        || c.recipientId === notification.senderId
+    );
+  
+    if (chatToUpdate) {
+      if (notification.type === 'ONLINE') {
+        chatToUpdate.recipientOnline = true;
+      }
+      
+      if (notification.type === 'OFFLINE') {
+        chatToUpdate.recipientOnline = false;
+      }
+    }
+  }
+  
+
 }
+
+

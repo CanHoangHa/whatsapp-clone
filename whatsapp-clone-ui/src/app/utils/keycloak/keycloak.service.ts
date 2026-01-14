@@ -22,7 +22,8 @@ export class KeycloakService {
 
   async init() {
     const authenticated = await this.keycloak.init({
-      onLoad: 'login-required'
+      onLoad: 'login-required',
+      checkLoginIframe: false
     });
   }
 
@@ -43,10 +44,23 @@ export class KeycloakService {
   }
 
   logout() {
-    return this.keycloak.login({redirectUri: 'http://localhost:4200'});
+    return this.keycloak.logout({redirectUri: 'http://localhost:4200'});
   }
 
   accountManagement() {
     return this.keycloak.accountManagement();
+  }
+
+  async getToken(): Promise<string> {
+    if (!this.keycloak) {
+        throw new Error('Keycloak not initialized');
+    }
+    try {
+        await this.keycloak.updateToken(70);
+        return this.keycloak.token as string;
+    } catch (error) {
+        this.logout();
+        throw error;
+    }
   }
 }

@@ -9,6 +9,7 @@ import com.hoangha.whatsappclone.notification.NotificationService;
 import com.hoangha.whatsappclone.notification.NotificationType;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class MessageService {
     private final ChatRepository chatRepository;
     private final MessageMapper mapper;
     private final FileService fileService;
-    private final NotificationService notificationService;
+    private final KafkaTemplate<String, Notification> kafkaTemplate;
 
     public void saveMessage(MessageRequest messageRequest){
         Chat chat = chatRepository.findById(messageRequest.getChatId())
@@ -49,7 +50,7 @@ public class MessageService {
                 .chatName(chat.getTargetChatName(message.getSenderId()))
                 .build();
 
-        notificationService.sendNotification(message.getReceiverId(), notification);
+        kafkaTemplate.send("message-topic", notification);
     }
 
     public List<MessageResponse> findChatMessages(String chatId) {
@@ -84,7 +85,7 @@ public class MessageService {
                     .type(NotificationType.SEEN)
                     .build();
 
-            notificationService.sendNotification(otherUserId, notification);
+            kafkaTemplate.send("message-topic", notification);
         }
     }
 
@@ -117,7 +118,7 @@ public class MessageService {
                 .media(FileUtils.readFileFromLocation(filePath))
                 .build();
 
-        notificationService.sendNotification(message.getReceiverId(), notification);
+        kafkaTemplate.send("message-topic", notification);
     }
 
     private String getSenderId(Chat chat, Authentication authentication) {

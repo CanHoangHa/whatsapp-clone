@@ -5,5 +5,7 @@ public enum NotificationType {
     MESSAGE,
     IMAGE,
     AUDIO,
-    VIDEO
+    VIDEO,
+    ONLINE,
+    OFFLINE
 }

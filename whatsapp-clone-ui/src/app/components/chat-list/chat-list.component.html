@@ -37,11 +37,16 @@
           <div class="d-flex flex-column">
             <span>{{chat.name}}</span>
             <small class="text-secondary">
-              @if (chat.lastMessage === 'Attachment') {
-                <i class="fas fa-image"></i>
+              @if (chat.lastMessage) {
+                @if (chat.lastMessage === 'Attachment') {
+                  <i class="fas fa-image"></i> Photo
+                } @else {
+                  {{ wrapMessage(chat.lastMessage) }}
+                }
+              } @else {
+                <span class="text-muted">No messages yet</span>
               }
-              {{wrapMessage (chat.lastMessage)}}
-            </small>
+            </small>            
           </div>
         </div>
 
