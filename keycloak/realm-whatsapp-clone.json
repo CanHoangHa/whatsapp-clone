@@ -1,6 +1,14 @@
 {
   "realm": "whatsapp-clone",
   "enabled": true,
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": false,
+  "rememberMe": true,
+  "verifyEmail": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
 
   "users": [
     {
